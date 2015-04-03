@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Brett Walker"]
   gem.email         = 'github@digitalmoksha.com'
   gem.summary       = "Plugins for motion-markdown-it"
-  gem.description   = "Plugins for motion-markdown-it"
+  gem.description   = "Plugins for use with motion-markdown-it"
   gem.homepage      = 'https://github.com/digitalmoksha/motion-markdown-it-plugins'
   gem.licenses      = ['MIT']
 

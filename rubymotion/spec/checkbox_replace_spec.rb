@@ -1,0 +1,1 @@
+../../spec/checkbox_replace/checkbox_replace_spec.rb

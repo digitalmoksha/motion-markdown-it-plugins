@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+$:.unshift("/Library/RubyMotion/lib")
+
+platform = ENV.fetch('platform', 'osx')
+
+require "motion/project/template/#{platform}"
+require 'rubygems'
+
+testing = true if ARGV.join(' ') =~ /spec/
+  
+begin
+  require 'bundler'
+  testing ? Bundler.require(:default, :spec) : Bundler.require
+rescue LoadError
+end
+
+Motion::Project::App.setup do |app|
+  app.name        = 'motion-markdown-it-plugins'
+  app.identifier  = 'com.motion-gemtest.motion-markdown-it-plugins'
+
+  # if testing
+  #   spec_dir_path  = File.join(File.dirname(__FILE__), '../spec')
+  #   # app.files.unshift(Dir.glob(File.join(spec_dir_path, "deflist/**/*_spec.rb")))
+  #   app.files << Dir.glob(File.join(spec_dir_path, "deflist/**/*_spec.rb"))
+  # end
+
+end

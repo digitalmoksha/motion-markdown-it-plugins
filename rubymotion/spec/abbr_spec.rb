@@ -1,0 +1,1 @@
+../../spec/abbr/abbr_spec.rb

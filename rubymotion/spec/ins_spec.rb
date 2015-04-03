@@ -1,0 +1,1 @@
+../../spec/ins/ins_spec.rb

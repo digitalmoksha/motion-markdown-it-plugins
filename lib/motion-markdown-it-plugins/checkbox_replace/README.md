@@ -2,7 +2,7 @@
 
 > Plugin to create checkboxes for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it) markdown parser.
 
-_Ported from the [javascript version](https://github.com/mcecot/markdown-it-checkbox). Works with Ruby and RubyMotion._
+_Ported from the [javascript version](https://github.com/mcecot/markdown-it-checkbox). Synced with v1.1.0.  Works with Ruby and RubyMotion._
 
 
 This plugin allows to create checkboxes for tasklists as discussed [here](http://talk.commonmark.org/t/task-lists-in-standard-markdown/41).

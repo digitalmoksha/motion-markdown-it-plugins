@@ -2,7 +2,7 @@
 
 > Abbreviation (`<abbr>`) tag plugin for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it) markdown parser.
 
-_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-abbr). Works with Ruby and RubyMotion._
+_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-abbr). Synced with v1.0.0. Works with Ruby and RubyMotion._
 
 Markup is based on [php markdown extra](https://michelf.ca/projects/php-markdown/extra/#abbr) definition, but without multiline support.
 

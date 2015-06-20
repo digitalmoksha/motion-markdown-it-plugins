@@ -2,7 +2,7 @@
 
 > `<mark>` tag plugin for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it) markdown parser.
 
-_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-mark). Works with Ruby and RubyMotion._
+_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-mark). Synced with v1.0.0. Works with Ruby and RubyMotion._
 
 `==marked==` => `<mark>inserted</mark>`
 

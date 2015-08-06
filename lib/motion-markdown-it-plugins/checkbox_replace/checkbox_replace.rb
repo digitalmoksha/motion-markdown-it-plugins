@@ -20,7 +20,7 @@ module MotionMarkdownItPlugins
     end
 
     #------------------------------------------------------------------------------
-    def createTokens(checked, label)
+    def createTokens(checked, label, original)
       nodes = []
 
       # <div class="checkbox">
@@ -48,7 +48,8 @@ module MotionMarkdownItPlugins
       # content of label tag
       token         = MarkdownIt::Token.new("text", "", 0)
       token.content = label
-      nodes.push token
+      original.children[0].content = label
+      original.children.each {|tok| nodes.push tok}
 
       # closing tags
       nodes.push MarkdownIt::Token.new("label_close", "label", -1)
@@ -56,23 +57,32 @@ module MotionMarkdownItPlugins
         nodes.push MarkdownIt::Token.new("checkbox_close", "div", -1)
       end
 
-      return nodes
+      original.children = nodes
+      return original
     end
   
+    # original should be an inline node.  it can only be a task item if the first 
+    # child node has the right text
     #------------------------------------------------------------------------------
     def splitTextToken(original)
 
-      text      = original.content
-      matches   = text.match(PATTERN)
+      if original.children
+        first_node = original.children[0]
+        if first_node
+          text      = first_node.content
+          matches   = text.match(PATTERN)
 
-      return original if matches == nil
+          return original if matches == nil
 
-      value     = matches[1]
-      label     = matches[2]
-      checked   = false
-      checked   = true if (value == "X" || value == "x")
+          value     = matches[1]
+          label     = matches[2]
+          checked   = false
+          checked   = true if (value == "X" || value == "x")
 
-      return createTokens(checked, label)
+          return createTokens(checked, label, original)
+        end
+      end
+      return original
     end
 
     #------------------------------------------------------------------------------
@@ -80,21 +90,30 @@ module MotionMarkdownItPlugins
       blockTokens = state.tokens
       j = 0
       l = blockTokens.length
+
+      # blockTokens.each do |xtoken|
+      #   puts "  " * xtoken.level + "#{xtoken.inspect}"
+      # end
+      
       while j < l
         if blockTokens[j].type != "inline"
           j += 1
           next
         end
         tokens = blockTokens[j].children
+        
+        # # We scan from the end, to keep position when new tags added.
+        # # Use reversed logic in links start/end match
+        # i = tokens.length - 1
+        # while i >= 0
+        #   token = tokens[i]
+        #   blockTokens[j].children = tokens = arrayReplaceAt(tokens, i, splitTextToken(token))
+        #   i -= 1
+        # end
 
-        # We scan from the end, to keep position when new tags added.
-        # Use reversed logic in links start/end match
-        i = tokens.length - 1
-        while i >= 0
-          token = tokens[i]
-          blockTokens[j].children = tokens = arrayReplaceAt(tokens, i, splitTextToken(token))
-          i -= 1
-        end
+        token = blockTokens[j]
+        arrayReplaceAt(blockTokens, j, splitTextToken(token))
+
         j += 1
       end
     end

@@ -26,7 +26,8 @@ module MotionMarkdownItPlugins
     def openSection(attrs)
       t = MarkdownIt::Token.new('section_open', 'section', 1)
       t.block = true
-#     t.attrs = attrs && attrs.map(function (attr) { return [attr[0], attr[1]] })  # copy
+      # This adds support for markdown-it-attrs.  It's still in JS.
+#     t.attrs = attrs && attrs.map(function (attr) { return [attr[0], attr[1]] })
       return t
     end
 

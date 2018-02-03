@@ -20,5 +20,6 @@ else
   require 'motion-markdown-it-plugins/sub/sub'
   require 'motion-markdown-it-plugins/sup/sup'
   require 'motion-markdown-it-plugins/container/container'
+  require 'motion-markdown-it-plugins/header_sections/header_sections'
   
 end

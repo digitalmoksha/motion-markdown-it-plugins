@@ -1,0 +1,205 @@
+Two H1 headers.
+(H1)(H1)
+.
+# T1 H1
+
+T1 This is a paragraph.
+
+# T1 H1
+
+T1 This is a paragraph.
+.
+<section>
+<h1>T1 H1</h1>
+<p>T1 This is a paragraph.</p>
+</section>
+<section>
+<h1>T1 H1</h1>
+<p>T1 This is a paragraph.</p>
+</section>
+.
+
+
+An H2 inside an H1.
+(H1(H2))
+.
+# T2 H1
+
+T2 This is a paragraph.
+
+## T2 H2
+
+T2 This is a paragraph.
+.
+<section>
+<h1>T2 H1</h1>
+<p>T2 This is a paragraph.</p>
+<section>
+<h2>T2 H2</h2>
+<p>T2 This is a paragraph.</p>
+</section>
+</section>
+.
+
+
+(H1(H2 H2))
+.
+# T2 H1
+
+## T2 H2 a
+
+## T2 H2 b
+.
+<section>
+<h1>T2 H1</h1>
+<section>
+<h2>T2 H2 a</h2>
+</section>
+<section>
+<h2>T2 H2 b</h2>
+</section>
+</section>
+.
+
+
+(H1(H2 H2)H1)
+.
+# T2 H1 a
+
+## T2 H2 a
+
+## T2 H2 b
+
+# T2 H1 b
+.
+<section>
+<h1>T2 H1 a</h1>
+<section>
+<h2>T2 H2 a</h2>
+</section>
+<section>
+<h2>T2 H2 b</h2>
+</section>
+</section>
+<section>
+<h1>T2 H1 b</h1>
+</section>
+.
+
+
+an exising document from markdown-it js
+.
+# Microcosm
+## Sample URLs
+# Users
+# Features
+## As a Visitor
+### About the microcosm
+### About the microcosm events
+### About the microcosm projects
+## As a Member
+### About the microcosm
+### About the member
+### About events
+### About projects
+### Other
+## As an Organizer
+### About the microcosm
+### Events
+### Membership
+### Quality Assurance
+## As an admin
+# QA
+# Ideas
+# See Also
+# Integration
+# Use Cases
+## An organizer organizes a street survey
+## At an event members upload pictures of their survey notes
+# Use
+.
+<section>
+<h1>Microcosm</h1>
+<section>
+<h2>Sample URLs</h2>
+</section>
+</section>
+<section>
+<h1>Users</h1>
+</section>
+<section>
+<h1>Features</h1>
+<section>
+<h2>As a Visitor</h2>
+<section>
+<h3>About the microcosm</h3>
+</section>
+<section>
+<h3>About the microcosm events</h3>
+</section>
+<section>
+<h3>About the microcosm projects</h3>
+</section>
+</section>
+<section>
+<h2>As a Member</h2>
+<section>
+<h3>About the microcosm</h3>
+</section>
+<section>
+<h3>About the member</h3>
+</section>
+<section>
+<h3>About events</h3>
+</section>
+<section>
+<h3>About projects</h3>
+</section>
+<section>
+<h3>Other</h3>
+</section>
+</section>
+<section>
+<h2>As an Organizer</h2>
+<section>
+<h3>About the microcosm</h3>
+</section>
+<section>
+<h3>Events</h3>
+</section>
+<section>
+<h3>Membership</h3>
+</section>
+<section>
+<h3>Quality Assurance</h3>
+</section>
+</section>
+<section>
+<h2>As an admin</h2>
+</section>
+</section>
+<section>
+<h1>QA</h1>
+</section>
+<section>
+<h1>Ideas</h1>
+</section>
+<section>
+<h1>See Also</h1>
+</section>
+<section>
+<h1>Integration</h1>
+</section>
+<section>
+<h1>Use Cases</h1>
+<section>
+<h2>An organizer organizes a street survey</h2>
+</section>
+<section>
+<h2>At an event members upload pictures of their survey notes</h2>
+</section>
+</section>
+<section>
+<h1>Use</h1>
+</section>
+.

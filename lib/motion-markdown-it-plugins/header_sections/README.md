@@ -1,6 +1,8 @@
 # markdown-it-header-sections
 
-This plugin is a ruby translation of https://github.com/arve0/markdown-it-header-sections
+> Wrap headers in sections plugin for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it) markdown parser.
+
+_Ported from the [javascript version](https://github.com/arve0/markdown-it-header-sections) by @openbrian. Synced with v1.0.0. Works with Ruby and RubyMotion._
 
 Renders this markdown
 ```md

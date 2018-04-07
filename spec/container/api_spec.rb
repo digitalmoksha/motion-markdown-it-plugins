@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 describe 'api' do
-  
+
   #------------------------------------------------------------------------------
   it 'renderer' do
     md = MarkdownIt::Parser.new
     md.use(MotionMarkdownItPlugins::Container, 'spoiler',
-      { render: lambda {|tokens, idx, _options, env, renderer| 
+      { render: lambda {|tokens, idx, _options, env, renderer|
                   tokens[idx].nesting == 1 ? "<details><summary>click me</summary>\n" : "</details>\n" }})
     res = md.render("::: spoiler\n*content*\n:::\n")
     expect(res).to eq "<details><summary>click me</summary>\n<p><em>content</em></p>\n</details>\n"
@@ -61,14 +61,21 @@ describe 'api' do
       md = MarkdownIt::Parser.new
       md.use(MotionMarkdownItPlugins::Container, 'name', {validate: lambda {|params| count += 1} })
       md.parse(":\n::\n:::\n::::\n:::::\n", {})
-      expect(count).to eq 3
+
+      # called by paragraph and lheading 3 times each
+      expect(count).to be > 0
+      expect(count % 3).to eq 0
     end
 
     #------------------------------------------------------------------------------
     it 'should not trim params' do
       md = MarkdownIt::Parser.new
-      md.use(MotionMarkdownItPlugins::Container, 'name', 
-           {validate: lambda {|params| expect(params).to eq '     name '; return 1  } })
+      md.use(MotionMarkdownItPlugins::Container, 'name',
+           {validate: lambda do |params|
+                        expect(params).to eq " \tname "
+                        return 1
+                      end
+            })
       md.parse("::: \tname \ncontent\n:::\n", {})
      end
   end

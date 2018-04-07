@@ -6,15 +6,21 @@ include MarkdownIt::Common::Utils
 
 module MotionMarkdownItPlugins
   class Abbr
-    PUNCT_CHARS         = ' \n()[]\'".,!?-'
-    PUNCT_CAHRS_ESCAPED = PUNCT_CHARS.chars.map {|c| escapeRE(c)}.join
-    
+    # ASCII characters in Cc, Sc, Sm, Sk categories we should terminate on;
+    # you can check character classes here:
+    # http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
+    OTHER_CHARS         = ' \r\n$+<=>^`|~'
+    OTHER_CHARS_ESCAPED = OTHER_CHARS.chars.map {|c| escapeRE(c)}.join
+
+    UNICODE_PUNCT_RE = UCMicro::Categories::P::REGEX
+    UNICODE_SPACE_RE = UCMicro::Categories::Z::REGEX
+
     #------------------------------------------------------------------------------
     def self.init_plugin(md)
-      md.block.ruler.before('reference', 'abbr_def', 
+      md.block.ruler.before('reference', 'abbr_def',
           lambda { |state, startLine, endLine, silent| Abbr.abbr_def(state, startLine, endLine, silent) },
           {alt: ['', 'paragraph', 'reference']})
-      md.core.ruler.after('inline', 'abbr_replace', lambda { |state| Abbr.abbr_replace(state) })
+      md.core.ruler.after('linkify', 'abbr_replace', lambda { |state| Abbr.abbr_replace(state) })
     end
 
     #------------------------------------------------------------------------------
@@ -43,12 +49,13 @@ module MotionMarkdownItPlugins
         pos += 1
       end
 
-      return false if (labelEnd < 0 || state.src.charCodeAt(labelEnd + 1) != 0x3A)  # ':'
+      return false if (labelEnd.nil? || state.src.charCodeAt(labelEnd + 1) != 0x3A)  # ':'
       return true  if (silent)
 
       label = state.src.slice(labelStart...labelEnd).gsub(/\\(.)/, '\1')
       title = state.src.slice((labelEnd + 2)...max).strip
-      return false if (title.length == 0)
+      return false if label.length == 0
+      return false if title.length == 0
 
       state.env[:abbreviations] = {} if (!state.env[:abbreviations])
       state.env[:abbreviations][label] = title if state.env[:abbreviations][label].nil?
@@ -62,14 +69,19 @@ module MotionMarkdownItPlugins
       blockTokens = state.tokens
 
       return if (!state.env[:abbreviations])
-      if (!state.env[:abbrRegExp])
-        regText = "(^|[#{PUNCT_CAHRS_ESCAPED}])("
-        regText << state.env[:abbreviations].keys.sort {|a, b| b.length <=> a.length}.map {|x| escapeRE(x)}.join('|')
-        regText << ")($|[#{PUNCT_CAHRS_ESCAPED}])"
 
-        state.env[:abbrRegExp] = Regexp.new(regText)
-      end
-      reg = state.env[:abbrRegExp]
+      regSimpleText  = '(?:'
+      regSimpleText << state.env[:abbreviations].keys.sort {|a, b| b.length <=> a.length}.map {|x| escapeRE(x)}.join('|')
+      regSimpleText << ')'
+      regSimple      = Regexp.new(regSimpleText)
+
+      regText  = "(^|#{UNICODE_PUNCT_RE}|#{UNICODE_SPACE_RE}" +
+                 "|[#{OTHER_CHARS_ESCAPED}])"
+      regText << '(' + state.env[:abbreviations].keys.sort {|a, b| b.length <=> a.length}.map {|x| escapeRE(x)}.join('|') + ')'
+      regText << "($|#{UNICODE_PUNCT_RE}|#{UNICODE_SPACE_RE}" +
+                 "|[#{OTHER_CHARS_ESCAPED}])"
+
+      reg = Regexp.new(regText)
 
       j = 0
       l = blockTokens.length
@@ -88,9 +100,13 @@ module MotionMarkdownItPlugins
           lastIndex = 0
           nodes     = []
 
+          # fast regexp run to determine whether there are any abbreviated words
+          # in the current token
+          i -= 1 and next if !(regSimple =~ text)
+
           while ((m = reg.match(text, lastIndex)))
             lastIndex = m.end(0)
-            if (lastIndex > pos)
+            if m.begin(0) > 0 || m[1]
               token         = MarkdownIt::Token.new('text', '', 0)
               token.content = text.slice(pos...(m.begin(0) + m[1].length))
               nodes.push(token)
@@ -107,7 +123,8 @@ module MotionMarkdownItPlugins
             token         = MarkdownIt::Token.new('abbr_close', 'abbr', -1)
             nodes.push(token)
 
-            pos = lastIndex - m[3].length
+            lastIndex -= m[3].length
+            pos        = lastIndex
           end
 
           i -= 1 and next if nodes.empty?

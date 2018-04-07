@@ -1,5 +1,5 @@
 module MotionMarkdownItPlugins
 
-  VERSION = '1.0.10'
+  VERSION = '8.4.1'
 
 end

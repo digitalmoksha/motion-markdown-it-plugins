@@ -1,5 +1,10 @@
 fixture_dir  = fixture_path('sub/fixtures')
 
+# TODO: these are parsed incorrectly:
+#
+# ~~~foo~~~
+# ~~~foo~ bar~~
+
 #------------------------------------------------------------------------------
 describe 'markdown-it-sub' do
   md = MarkdownIt::Parser.new

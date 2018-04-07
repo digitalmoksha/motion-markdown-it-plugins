@@ -9,7 +9,7 @@ module MotionMarkdownItPlugins
 
     #------------------------------------------------------------------------------
     def self.init_plugin(md)
-      md.block.ruler.before('paragraph', 'deflist', 
+      md.block.ruler.before('paragraph', 'deflist',
           lambda { |state, startLine, endLine, silent| Deflist.deflist(state, startLine, endLine, silent) },
           {alt: ['', 'paragraph', 'reference']})
     end
@@ -36,7 +36,7 @@ module MotionMarkdownItPlugins
       # no empty definitions, e.g. "  : "
       return -1 if (pos >= max)
 
-      return pos
+      return start
     end
 
     #------------------------------------------------------------------------------
@@ -63,21 +63,27 @@ module MotionMarkdownItPlugins
       end
 
       nextLine = startLine + 1
-      if (state.isEmpty(nextLine))
+      return false if nextLine >= endLine
+
+      if state.isEmpty(nextLine)
         nextLine += 1
-        return false if (nextLine > endLine)
+        return false if nextLine >= endLine
       end
 
-      return false if (state.tShift[nextLine] < state.blkIndent)
+      return false if (state.sCount[nextLine] < state.blkIndent)
       contentStart = skipMarker(state, nextLine)
       return false if (contentStart < 0)
 
       # Start list
       listTokIdx = state.tokens.length
+      tight      = true
+
       token      = state.push('dl_open', 'dl', 1)
       token.map  = listLines = [ startLine, 0 ]
 
-      #--- Iterate list items
+      #
+      # Iterate list items
+      #
 
       dtLine = startLine
       ddLine = nextLine
@@ -90,7 +96,6 @@ module MotionMarkdownItPlugins
       # OUTER:
       while true
         break_outer    = false
-        tight          = true
         prevEmptyEnd   = false
 
         token          = state.push('dt_open', 'dt', 1)
@@ -107,13 +112,37 @@ module MotionMarkdownItPlugins
           token     = state.push('dd_open', 'dd', 1)
           token.map = itemLines = [ nextLine, 0 ]
 
+          pos    = contentStart
+          max    = state.eMarks[ddLine]
+          offset = state.sCount[ddLine] + contentStart - (state.bMarks[ddLine] + state.tShift[ddLine])
+
+          while pos < max
+            ch = state.src.charCodeAt(pos)
+
+            if isSpace(ch)
+              if ch == 0x09
+                offset += 4 - offset % 4
+              else
+                offset += 1
+              end
+            else
+              break
+            end
+
+            pos += 1
+          end
+
+          contentStart = pos
+
           oldTight             = state.tight
           oldDDIndent          = state.ddIndent
           oldIndent            = state.blkIndent
           oldTShift            = state.tShift[ddLine]
+          oldSCount            = state.sCount[ddLine]
           oldParentType        = state.parentType
-          state.blkIndent      = state.ddIndent = state.tShift[ddLine] + 2
+          state.blkIndent      = state.ddIndent = state.sCount[ddLine] + 2
           state.tShift[ddLine] = contentStart - state.bMarks[ddLine]
+          state.sCount[ddLine] = offset
           state.tight          = true
           state.parentType     = 'deflist'
 
@@ -128,6 +157,7 @@ module MotionMarkdownItPlugins
           prevEmptyEnd = (state.line - ddLine) > 1 && state.isEmpty(state.line - 1)
 
           state.tShift[ddLine] = oldTShift
+          state.sCount[ddLine] = oldSCount
           state.tight          = oldTight
           state.parentType     = oldParentType
           state.blkIndent      = oldIndent
@@ -138,7 +168,7 @@ module MotionMarkdownItPlugins
           itemLines[1] = nextLine = state.line
 
           break_outer = true and break if (nextLine >= endLine)
-          break_outer = true and break if (state.tShift[nextLine] < state.blkIndent)
+          break_outer = true and break if (state.sCount[nextLine] < state.blkIndent)
           contentStart = skipMarker(state, nextLine)
           break if (contentStart < 0)
 
@@ -148,19 +178,19 @@ module MotionMarkdownItPlugins
           # insert DD tag and repeat checking
         end
         break if break_outer
-        
+
         break if (nextLine >= endLine)
         dtLine = nextLine
 
         break if (state.isEmpty(dtLine))
-        break if (state.tShift[dtLine] < state.blkIndent)
+        break if (state.sCount[dtLine] < state.blkIndent)
 
         ddLine = dtLine + 1
         break if (ddLine >= endLine)
         ddLine += 1 if (state.isEmpty(ddLine))
         break if (ddLine >= endLine)
 
-        break if (state.tShift[ddLine] < state.blkIndent)
+        break if (state.sCount[ddLine] < state.blkIndent)
         contentStart = skipMarker(state, ddLine)
         break if (contentStart < 0)
 
@@ -168,7 +198,7 @@ module MotionMarkdownItPlugins
         # insert DT and DD tags and repeat checking
       end
 
-      # Finilize list
+      # Finalize list
       token        = state.push('dl_close', 'dl', -1)
       listLines[1] = nextLine
       state.line   = nextLine

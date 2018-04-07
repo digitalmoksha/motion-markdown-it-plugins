@@ -1,6 +1,7 @@
 # motion-markdown-it-plugins
 
 [![Gem Version](https://badge.fury.io/rb/motion-markdown-it-plugins.svg)](http://badge.fury.io/rb/motion-markdown-it-plugins)
+[![Build Status](https://travis-ci.org/digitalmoksha/motion-markdown-it-plugins.svg?branch=master)](https://travis-ci.org/digitalmoksha/motion-markdown-it-plugins)
 
 Various useful plugins for use with `motion-markdown-it`. Works with Ruby and RubyMotion.
 

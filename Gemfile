@@ -2,6 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'rspec'
-gem 'byebug', github: 'deivid-rodriguez/byebug', branch: 'master'
+gem 'pry-byebug', '~> 3.4.1', platform: :mri
 
 gemspec

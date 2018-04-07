@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
 
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'motion-markdown-it', '~> 4.0'
+  gem.add_dependency 'motion-markdown-it', '~> 8.0'
 end

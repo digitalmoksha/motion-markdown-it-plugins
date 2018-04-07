@@ -8,11 +8,11 @@ module MotionMarkdownItPlugins
     extend MarkdownIt::Common::Utils
 
     attr_accessor   :render
-    
+
     #------------------------------------------------------------------------------
     def self.init_plugin(md, name, options = {})
       container_obj = Container.new(md, name, options)
-      md.block.ruler.before('fence', "container_#{name}", 
+      md.block.ruler.before('fence', "container_#{name}",
           lambda { |state, startLine, endLine, silent| container_obj.container(state, startLine, endLine, silent) },
           {alt: [ '', 'paragraph', 'reference', 'blockquote', 'list' ]})
 
@@ -71,6 +71,7 @@ module MotionMarkdownItPlugins
 
       markup = state.src.slice(start...pos)
       params = state.src.slice(pos...max)
+
       return false if (!@validate.call(params))
 
       # Since start is found, we can report success here in validation mode
@@ -90,7 +91,7 @@ module MotionMarkdownItPlugins
         start = state.bMarks[nextLine] + state.tShift[nextLine]
         max   = state.eMarks[nextLine]
 
-        if (start < max && state.tShift[nextLine] < state.blkIndent)
+        if (start < max && state.sCount[nextLine] < state.blkIndent)
           # non-empty line with negative indent should stop the list:
           # - ```
           #  test
@@ -99,7 +100,7 @@ module MotionMarkdownItPlugins
 
         next if (@marker_char != state.src.charCodeAt(start))
 
-        if (state.tShift[nextLine] - state.blkIndent >= 4)
+        if (state.sCount[nextLine] - state.blkIndent >= 4)
           # closing fence should be indented less than 4 spaces
           next
         end

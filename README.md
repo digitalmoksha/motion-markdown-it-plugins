@@ -13,6 +13,7 @@ Each one has a README with details
 * [Checkbox/Tasklists](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/checkbox_replace)
 * [Containers](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/container)
 * [Definition Lists](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/deflist)
+* [Emoji](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/emoji)
 * [Header Sections](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/header_sections)
 * [Insert](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/ins)
 * [Mark](https://github.com/digitalmoksha/motion-markdown-it-plugins/tree/master/lib/motion-markdown-it-plugins/mark)

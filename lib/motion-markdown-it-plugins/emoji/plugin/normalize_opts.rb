@@ -3,56 +3,59 @@ module MotionMarkdownItPlugins
     module NormalizeOpts
       #------------------------------------------------------------------------------
       def quoteRE(str)
-        # return str.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&')
+        # str.gsub(/[.?*+^$[\]\\(){}|-]/, '\\$&')
+        str.gsub(/[.?*+^$[\\]\\(){}|-]/, '\\$&') # TODO above is original - is this complete?
       end
 
       #------------------------------------------------------------------------------
       def normalize_opts(options)
         emojies = options[:defs]
 
-        # // Filter emojies by whitelist, if needed
-        # if (options.enabled.length) {
-        #   emojies = Object.keys(emojies).reduce(function (acc, key) {
-        #     if (options.enabled.indexOf(key) >= 0) {
-        #       acc[key] = emojies[key];
-        #     }
-        #     return acc;
-        #   }, {});
-        # }
-        #
-        # // Flatten shortcuts to simple object: { alias: emoji_name }
-        # shortcuts = Object.keys(options.shortcuts).reduce(function (acc, key) {
-        #   // Skip aliases for filtered emojies, to reduce regexp
-        #   if (!emojies[key]) { return acc; }
-        #
-        #   if (Array.isArray(options.shortcuts[key])) {
-        #     options.shortcuts[key].forEach(function (alias) {
-        #       acc[alias] = key;
-        #     });
-        #     return acc;
-        #   }
-        #
-        #   acc[options.shortcuts[key]] = key;
-        #   return acc;
-        # }, {});
-        #
-        # // Compile regexp
-        # var names = Object.keys(emojies)
-        #               .map(function (name) { return ':' + name + ':'; })
-        #               .concat(Object.keys(shortcuts))
-        #               .sort()
-        #               .reverse()
-        #               .map(function (name) { return quoteRE(name); })
-        #               .join('|');
-        # var scanRE = RegExp(names);
-        # var replaceRE = RegExp(names, 'g');
+        # Filter emojies by whitelist, if needed
+        if options[:enabled].length > 0
+          emojies = emojies.keys.reduce({}) do |acc, key|
+            if options[:enabled].include?(key)
+              acc[key] = emojies[key]
+            end
 
-        # return {
-        #   defs: emojies,
-        #   shortcuts: shortcuts,
-        #   scanRE: scanRE,
-        #   replaceRE: replaceRE
-        # };
+            acc
+          end
+        end
+
+        # Flatten shortcuts to simple object: { alias: emoji_name }
+        shortcuts = options[:shortcuts].keys.reduce({}) do |acc, key|
+          # Skip aliases for filtered emojies, to reduce regexp
+          next acc if !emojies[key.to_s]
+
+          if options[:shortcuts][key].is_a?(Array)
+            options[:shortcuts][key].each do |alias_value|
+              acc[alias_value] = key
+            end
+            next acc
+          end
+
+          acc[options[:shortcuts][key]] = key
+          acc
+        end
+
+        # Compile regexp
+        names = emojies.keys
+                      .map { |name| ':' + name.to_s + ':' }
+                      .concat(shortcuts.keys)
+                      .sort
+                      .reverse
+                      .map { |name| quoteRE(name) }
+                      .join('|')
+
+        scanRE    = Regexp.new(names)
+        replaceRE = Regexp.new(names)
+
+        return {
+          defs:       emojies,
+          shortcuts:  shortcuts,
+          scanRE:     scanRE,
+          replaceRE:  replaceRE
+        }
       end
     end
   end

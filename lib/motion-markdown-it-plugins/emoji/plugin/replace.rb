@@ -17,6 +17,7 @@ module MotionMarkdownItPlugins
         @shortcuts  = shortcuts
         @scanRE     = scanRE
         @replaceRE  = replaceRE
+
         return lambda { |state| emoji_replace(state) }
       end
 
@@ -28,7 +29,7 @@ module MotionMarkdownItPlugins
         text.gsub(@replaceRE) do |match|
           match_data  = Regexp.last_match
           offset      = match_data.offset(0)[0]
-          src         = $'
+          src         = match_data.string
 
           # Validate emoji name
           if @shortcuts.include?(match)
@@ -36,18 +37,18 @@ module MotionMarkdownItPlugins
             emoji_name = @shortcuts[match]
 
             # Don't allow letters before any shortcut (as in no ":/" in http://)
-            return if offset > 0 && !ZPCC_RE =~ src[offset - 1]
+            next if offset > 0 && !(ZPCC_RE =~ src[offset - 1])
 
             # Don't allow letters after any shortcut
-            return if (offset + match.length < src.length) && !ZPCC_RE =~ src[offset + match.length]
+            next if (offset + match.length < src.length) && !(ZPCC_RE =~ src[offset + match.length])
           else
-            emoji_name = match.slice(1, match.length - 2)
+            emoji_name = match.slice(1...-1)
           end
 
           # Add new tokens to pending list
           if offset > last_pos
             token         = token_class.new('text', '', 0)
-            token.content = text.slice(last_pos, offset)
+            token.content = text.slice(last_pos...offset)
             nodes.push(token)
           end
 
@@ -61,7 +62,7 @@ module MotionMarkdownItPlugins
 
         if last_pos < text.length
           token         = token_class.new('text', '', 0)
-          token.content = text.slice(last_pos)
+          token.content = text.slice(last_pos..-1)
           nodes.push(token)
         end
 

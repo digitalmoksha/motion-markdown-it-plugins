@@ -2,7 +2,7 @@ module MotionMarkdownItPlugins
   module EmojiPlugin
     module Data
       module Full
-        EMOJIIES_DEF_FULL = {
+        EMOJIES_DEF_FULL = {
           "100" => "💯",
           "1234" => "🔢",
           "grinning" => "😀",

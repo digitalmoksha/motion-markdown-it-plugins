@@ -3,8 +3,7 @@ module MotionMarkdownItPlugins
     module NormalizeOpts
       #------------------------------------------------------------------------------
       def quoteRE(str)
-        # str.gsub(/[.?*+^$[\]\\(){}|-]/, '\\$&')
-        str.gsub(/[.?*+^$[\\]\\(){}|-]/, '\\$&') # TODO above is original - is this complete?
+        str.gsub(/([.?*+^$\[\]\\(){}|-])/, '\\\\\1')
       end
 
       #------------------------------------------------------------------------------
@@ -25,7 +24,7 @@ module MotionMarkdownItPlugins
         # Flatten shortcuts to simple object: { alias: emoji_name }
         shortcuts = options[:shortcuts].keys.reduce({}) do |acc, key|
           # Skip aliases for filtered emojies, to reduce regexp
-          next acc if !emojies[key.to_s]
+          next acc if !emojies[key]
 
           if options[:shortcuts][key].is_a?(Array)
             options[:shortcuts][key].each do |alias_value|
@@ -40,7 +39,7 @@ module MotionMarkdownItPlugins
 
         # Compile regexp
         names = emojies.keys
-                      .map { |name| ':' + name.to_s + ':' }
+                      .map { |name| ':' + name + ':' }
                       .concat(shortcuts.keys)
                       .sort
                       .reverse

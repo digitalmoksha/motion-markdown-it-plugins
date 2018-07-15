@@ -22,10 +22,12 @@ else
   require 'motion-markdown-it-plugins/container/container'
   require 'motion-markdown-it-plugins/header_sections/header_sections'
   require 'motion-markdown-it-plugins/emoji/plugin/data/full'
+  require 'motion-markdown-it-plugins/emoji/plugin/data/light'
   require 'motion-markdown-it-plugins/emoji/plugin/data/shortcuts'
   require 'motion-markdown-it-plugins/emoji/plugin/render'
   require 'motion-markdown-it-plugins/emoji/plugin/replace'
   require 'motion-markdown-it-plugins/emoji/plugin/normalize_opts'
   require 'motion-markdown-it-plugins/emoji/emoji'
+  require 'motion-markdown-it-plugins/emoji/emoji_light'
 
 end

@@ -2,7 +2,7 @@ module MotionMarkdownItPlugins
   module EmojiPlugin
     module Data
       module Light
-        EMOJIIES_DEF_LIGHT = {
+        EMOJIES_DEF_LIGHT = {
           "grinning" => "😀",
           "smiley" => "😃",
           "smile" => "😄",

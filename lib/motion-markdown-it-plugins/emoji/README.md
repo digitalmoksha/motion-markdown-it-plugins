@@ -1,8 +1,8 @@
 # markdown-it-emoji
 
-> Plugin for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it markdown parser, adding emoji & emoticon syntax support.
+> Plugin for [motion-markdown-it](https://github.com/digitalmoksha/motion-markdown-it) markdown parser, adding emoji & emoticon syntax support.
 
-_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-emoji/). Synced with v1.4.0. Works with Ruby and RubyMotion._
+_Ported from the [javascript version](https://github.com/markdown-it/markdown-it-emoji). Synced with v1.4.0. Works with Ruby and RubyMotion._
 
 ---
 

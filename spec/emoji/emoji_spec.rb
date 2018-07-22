@@ -83,19 +83,15 @@ describe 'markdown-it-emoji-light' do
   end
 end
 
-include MotionMarkdownItPlugins::EmojiPlugin::Data::Shortcuts
-include MotionMarkdownItPlugins::EmojiPlugin::Data::Full
-include MotionMarkdownItPlugins::EmojiPlugin::Data::Light
-
 describe 'integrity' do
   it 'all shortcuts should exist' do
-    EMOJIES_DEF_SHORTCUTS.keys.each do |name|
-      expect(EMOJIES_DEF_FULL[name]).not_to eq nil
+    MotionMarkdownItPlugins::EmojiPlugin::Data::Shortcuts::EMOJIES_DEF_SHORTCUTS.keys.each do |name|
+      expect(MotionMarkdownItPlugins::EmojiPlugin::Data::Full::EMOJIES_DEF_FULL[name]).not_to eq nil
     end
   end
 
   it 'no chars with "uXXXX" names allowed' do
-    EMOJIES_DEF_FULL.keys.each do |name|
+    MotionMarkdownItPlugins::EmojiPlugin::Data::Full::EMOJIES_DEF_FULL.keys.each do |name|
       expect(/^u[0-9a-b]{4,}$/ =~ name).to eq nil
     end
   end
@@ -104,8 +100,8 @@ describe 'integrity' do
 
     visible = File.read(File.join(fixture_dir, 'visible.txt'))
 
-    available = EMOJIES_DEF_LIGHT.keys.map do |k|
-      EMOJIES_DEF_LIGHT[k].gsub(/\uFE0F/, '')
+    available = MotionMarkdownItPlugins::EmojiPlugin::Data::Light::EMOJIES_DEF_LIGHT.keys.map do |k|
+      MotionMarkdownItPlugins::EmojiPlugin::Data::Light::EMOJIES_DEF_LIGHT[k].gsub(/\uFE0F/, '')
     end
 
     missed = ''

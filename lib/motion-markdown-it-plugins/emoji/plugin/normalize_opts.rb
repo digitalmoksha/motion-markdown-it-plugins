@@ -6,9 +6,16 @@ module MotionMarkdownItPlugins
         str.gsub(/([.?*+^$\[\]\\(){}|-])/, '\\\\\1')
       end
 
+      # convert keys from symbols into strings
+      #------------------------------------------------------------------------------
+      def stringify(symbol_hash)
+        symbol_hash.collect{|k,v| [k.to_s, v]}.to_h
+      end
+
       #------------------------------------------------------------------------------
       def normalize_opts(options)
-        emojies = options[:defs]
+        emojies   = stringify(options[:defs])
+        shortcuts = stringify(options[:shortcuts])
 
         # Filter emojies by whitelist, if needed
         if options[:enabled].length > 0
@@ -22,18 +29,18 @@ module MotionMarkdownItPlugins
         end
 
         # Flatten shortcuts to simple object: { alias: emoji_name }
-        shortcuts = options[:shortcuts].keys.reduce({}) do |acc, key|
+        shortcuts = shortcuts.keys.reduce({}) do |acc, key|
           # Skip aliases for filtered emojies, to reduce regexp
           next acc if !emojies[key]
 
-          if options[:shortcuts][key].is_a?(Array)
-            options[:shortcuts][key].each do |alias_value|
+          if shortcuts[key].is_a?(Array)
+            shortcuts[key].each do |alias_value|
               acc[alias_value] = key
             end
             next acc
           end
 
-          acc[options[:shortcuts][key]] = key
+          acc[shortcuts[key]] = key
           acc
         end
 

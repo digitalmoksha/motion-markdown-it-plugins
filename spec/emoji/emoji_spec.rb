@@ -15,12 +15,12 @@ describe 'markdown-it-emoji' do
     md = MarkdownIt::Parser.new
     md.use(MotionMarkdownItPlugins::Emoji, {
       defs: {
-        'one' => '!!!one!!!',
-        'fifty' => '!!50!!'
+        one:   '!!!one!!!',
+        fifty: '!!50!!'
       },
       shortcuts: {
-        'fifty' => [ ':50', '|50' ],
-        'one' => ':uno'
+        fifty: [ ':50', '|50' ],
+        one:   ':uno'
       }
     })
 
@@ -56,12 +56,12 @@ describe 'markdown-it-emoji-light' do
     md = MarkdownIt::Parser.new
     md.use(MotionMarkdownItPlugins::EmojiLight, {
       defs: {
-        'one' => '!!!one!!!',
-        'fifty' => '!!50!!'
+        one:   '!!!one!!!',
+        fifty: '!!50!!'
       },
       shortcuts: {
-        'fifty' => [ ':50', '|50' ],
-        'one' => ':uno'
+        fifty: [ ':50', '|50' ],
+        one: ':uno'
       }
     })
 

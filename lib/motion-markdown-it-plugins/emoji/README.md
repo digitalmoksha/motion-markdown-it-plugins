@@ -29,21 +29,21 @@ output s`<p>Yeah this works 😄 😦</p>`
 Options are not mandatory:
 
 - __defs__ (Hash) - rewrite available emoji definitions
-  - example: `{ "one" => "!!one!!", "fifty" = "!!50!!" }`
+  - example: `{ one: "!!one!!", fifty: "!!50!!" }`
 - __enabled__ (Array) - disable all emojis except those whitelisted
 - __shortcuts__ (Hash) - rewrite default shortcuts
-  - example: `{ "smile" => [ ":)", ":-)" ], "laughing" => ":D" }`
+  - example: `{ smile: [ ":)", ":-)" ], laughing: ":D" }`
 
 ```ruby
 md = MarkdownIt::Parser.new
 md.use(MotionMarkdownItPlugins::Emoji, {
   defs: {
-    'one' => '!!!one!!!',
-    'fifty' => '!!50!!'
+    one:   '!!!one!!!',
+    fifty: '!!50!!'
   },
   shortcuts: {
-    'fifty' => [ ':50', '|50' ],
-    'one' => ':uno'
+    fifty: [ ':50', '|50' ],
+    one:   ':uno'
   }
 })
 

@@ -6,16 +6,10 @@ module MotionMarkdownItPlugins
         str.gsub(/([.?*+^$\[\]\\(){}|-])/, '\\\\\1')
       end
 
-      # convert keys from symbols into strings
-      #------------------------------------------------------------------------------
-      def stringify(symbol_hash)
-        symbol_hash.collect{|k,v| [k.to_s, v]}.to_h
-      end
-
       #------------------------------------------------------------------------------
       def normalize_opts(options)
-        emojies   = stringify(options[:defs])
-        shortcuts = stringify(options[:shortcuts])
+        emojies   = stringify_keys(options[:defs])
+        shortcuts = stringify_keys(options[:shortcuts])
 
         # Filter emojies by whitelist, if needed
         if options[:enabled].length > 0
@@ -62,6 +56,16 @@ module MotionMarkdownItPlugins
           scanRE:     scanRE,
           replaceRE:  replaceRE
         }
+      end
+
+      private
+
+      # convert keys from symbols into strings
+      #------------------------------------------------------------------------------
+      def stringify_keys(symbol_hash)
+        result = {}
+        symbol_hash.each_key { |key| result[key.to_s] = symbol_hash[key] }
+        result
       end
     end
   end

@@ -22,3 +22,6 @@ Motion::Project::App.setup do |app|
 
   app.detect_dependencies = true
 end
+
+desc "Open app with a command line console"
+task :console => :run

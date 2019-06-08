@@ -24,7 +24,7 @@ module MotionMarkdownItPlugins
       return -1 if (start >= max)
 
       # Check bullet
-      marker = state.src.charCodeAt(start)
+      marker = charCodeAt(state.src, start)
       start += 1
       return -1 if (marker != 0x7E && marker != 0x3A) #  '~'  ':'
 
@@ -117,7 +117,7 @@ module MotionMarkdownItPlugins
           offset = state.sCount[ddLine] + contentStart - (state.bMarks[ddLine] + state.tShift[ddLine])
 
           while pos < max
-            ch = state.src.charCodeAt(pos)
+            ch = charCodeAt(state.src, pos)
 
             if isSpace(ch)
               if ch == 0x09

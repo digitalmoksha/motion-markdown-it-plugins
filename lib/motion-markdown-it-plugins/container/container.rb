@@ -26,7 +26,7 @@ module MotionMarkdownItPlugins
       @name        = name
       @min_markers = 3
       @marker_str  = @options[:marker] || ':'
-      @marker_char = @marker_str.charCodeAt(0)
+      @marker_char = charCodeAt(@marker_str, 0)
       @marker_len  = @marker_str.length
       @validate    = @options[:validate] || lambda {|params| validateDefault(params) }
       @render      = @options[:render]   || lambda {|tokens, idx, _options, env, renderer| renderDefault(tokens, idx, _options, env, renderer) }
@@ -56,7 +56,7 @@ module MotionMarkdownItPlugins
 
       # Check out the first character quickly,
       # this should filter out most of non-containers
-      return false if (@marker_char != state.src.charCodeAt(start))
+      return false if (@marker_char != charCodeAt(state.src, start))
 
       # Check out the rest of the marker string
       pos = start + 1
@@ -98,7 +98,7 @@ module MotionMarkdownItPlugins
           break
         end
 
-        next if (@marker_char != state.src.charCodeAt(start))
+        next if (@marker_char != charCodeAt(state.src, start))
 
         if (state.sCount[nextLine] - state.blkIndent >= 4)
           # closing fence should be indented less than 4 spaces

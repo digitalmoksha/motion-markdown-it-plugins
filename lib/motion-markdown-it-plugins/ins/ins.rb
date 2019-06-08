@@ -15,7 +15,7 @@ module MotionMarkdownItPlugins
     #
     def self.tokenize(state, silent)
       start  = state.pos
-      marker = state.src.charCodeAt(start)
+      marker = charCodeAt(state.src, start)
 
       return false if silent
 

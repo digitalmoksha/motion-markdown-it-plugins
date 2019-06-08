@@ -20,14 +20,14 @@ module MotionMarkdownItPlugins
       max   = state.posMax
       start = state.pos
 
-      return false if (state.src.charCodeAt(start) != 0x5E)  #  '^'
+      return false if charCodeAt(state.src, start) != 0x5E  #  '^'
       return false if (silent)  # don't run any pairs in validation mode
       return false if (start + 2 >= max)
 
       state.pos = start + 1
 
       while (state.pos < max)
-        if (state.src.charCodeAt(state.pos) == 0x5E)  # '^'
+        if charCodeAt(state.src, state.pos) == 0x5E  # '^'
           found = true
           break
         end

@@ -29,15 +29,15 @@ module MotionMarkdownItPlugins
       max = state.eMarks[startLine]
 
       return false if (pos + 2 >= max)
-      return false if (state.src.charCodeAt(pos) != 0x2A)  # '*'
+      return false if charCodeAt(state.src, pos) != 0x2A  # '*'
       pos += 1
-      return false if (state.src.charCodeAt(pos) != 0x5B)  # '['
+      return false if charCodeAt(state.src, pos) != 0x5B  # '['
       pos += 1
 
       labelStart = pos
 
       while pos < max
-        ch = state.src.charCodeAt(pos)
+        ch = charCodeAt(state.src, pos)
         if (ch == 0x5B)  # '['
           return false
         elsif (ch == 0x5D)  #  ']'
@@ -49,7 +49,7 @@ module MotionMarkdownItPlugins
         pos += 1
       end
 
-      return false if (labelEnd.nil? || state.src.charCodeAt(labelEnd + 1) != 0x3A)  # ':'
+      return false if (labelEnd.nil? || charCodeAt(state.src, labelEnd + 1) != 0x3A)  # ':'
       return true  if (silent)
 
       label = state.src.slice(labelStart...labelEnd).gsub(/\\(.)/, '\1')

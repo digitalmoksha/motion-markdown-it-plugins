@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
 
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'motion-markdown-it', '~> 8.4'
+  gem.add_dependency 'motion-markdown-it', '> 8.4.1.1'
 
   gem.add_development_dependency 'bacon-expect', '~> 1.0' # required for Travis build to work
 end
